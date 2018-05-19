@@ -94,15 +94,28 @@ server.on('stream', async (stream, headers) => {
         });
 
         const cssFile = getFileDescription('style.css');
+        const cssFile1 = getFileDescription('style1.css');
         const jsFile = getFileDescription('script.js');
 
+        const jsFile1 = getFileDescription('script1.js');
+        const jsFile2 = getFileDescription('script2.js');
+
+
         pushAsset(stream, cssFile);
+        pushAsset(stream, cssFile1);
+
+        // try to uncomment and made some quick of page refreshes - i'll get an error!
+        // pushAsset(stream, jsFile1);
+        // pushAsset(stream, jsFile2);
 
         stream.write('' +
             '<html>\n' +
             '<head>\n' +
+
             '    <link rel="stylesheet" type="text/css"  href="/style.css">\n' +
-            '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n'
+            '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n' +
+
+            ''
         );
 
         // emulation of async with timeout rendering
