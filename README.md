@@ -7,7 +7,7 @@ Buggy situations
 setTimeout(resolve, 0); -> setTimeout(resolve, 1000);
 ```
  
-and try to quicly refresh the page - error:
+and try to quicly refresh the page - it will reproduce the error:
 
 ```
 (node:3652) UnhandledPromiseRejectionWarning: Error [ERR_STREAM_WRITE_AFTER_END]: write after end
