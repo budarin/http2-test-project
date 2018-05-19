@@ -65,7 +65,7 @@ function getFileDescription(file) {
 const secondRender = async (stream, jsFile) => {
     // emulate a long rendering
     await new Promise(resolve => {
-        setTimeout(resolve, 1000);
+        setTimeout(resolve, 0); //1000);
     });
 
     stream.write('' +
