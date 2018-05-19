@@ -119,7 +119,7 @@ server.on('stream', async (stream, headers) => {
             ''
         );
 
-        // emulation of async with timeout rendering
+        // emulation of a long async rendering
         await secondRender(stream, jsFile);
 
     } else {
