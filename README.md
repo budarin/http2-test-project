@@ -17,7 +17,7 @@ and try to quickly refresh the page - it will reproduce the error:
 (node:3652) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
 
 ```
-- if uncomment these lines with unused assets (comment before emulation of a long rendering):
+- if uncomment these lines with unused assets:
 ```js
     // pushAsset(stream, jsFile1);
     // pushAsset(stream, jsFile2);
