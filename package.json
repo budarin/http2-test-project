@@ -1,0 +1,14 @@
+{
+  "name": "http2-test-project",
+  "version": "1.0.0",
+  "description": "Http2 test project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "author": "Budarin Vadim",
+  "license": "ISC",
+  "devDependencies": {
+    "mime-types": "^2.1.18"
+  }
+}
