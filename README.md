@@ -7,7 +7,7 @@ Buggy situations
 setTimeout(resolve, 0); -> setTimeout(resolve, 1000);
 ```
  
-and try to quicly refresh the page - it will reproduce the error:
+and try to quickly refresh the page - it will reproduce the error:
 
 ```
 (node:3652) UnhandledPromiseRejectionWarning: Error [ERR_STREAM_WRITE_AFTER_END]: write after end
@@ -22,7 +22,7 @@ and try to quicly refresh the page - it will reproduce the error:
     // pushAsset(stream, jsFile1);
     // pushAsset(stream, jsFile2);
 ```
-and try quicly refresh the page - error:
+and try quickly refresh the page - error:
 ```
 events.js:167
       throw er; // Unhandled 'error' event
