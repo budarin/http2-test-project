@@ -63,6 +63,11 @@ function getFileDescription(file) {
 }
 
 const secondRender = async (stream, jsFile) => {
+    // emulate a long rendering
+    await new Promise(resolve => {
+        setTimeout(resolve, 1000);
+    });
+
     stream.write('' +
         '</head>\n' +
         '<body>\n' +
@@ -71,14 +76,10 @@ const secondRender = async (stream, jsFile) => {
         '<script src="script.js"></script>' +
         '<html>'
     );
+
     stream.end();
 
     pushAsset(stream, jsFile);
-
-    // emulate a long rendering
-    await new Promise(resolve => {
-        setTimeout(resolve, 500);
-    });
 };
 
 server.on('stream', async (stream, headers) => {
