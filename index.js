@@ -62,7 +62,26 @@ function getFileDescription(file) {
     };
 }
 
-server.on('stream', (stream, headers) => {
+const secondRender = async (stream, jsFile) => {
+    stream.write('' +
+        '</head>\n' +
+        '<body>\n' +
+        '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
+        '</body>\n' +
+        '<script src="script.js"></script>' +
+        '<html>'
+    );
+    stream.end();
+
+    pushAsset(stream, jsFile);
+
+    // emulate a long rendering
+    await new Promise(resolve => {
+        setTimeout(resolve, 500);
+    });
+};
+
+server.on('stream', async (stream, headers) => {
     const fullPath = headers[HTTP2_HEADER_PATH];
     const method = headers[HTTP2_HEADER_METHOD];
 
@@ -86,19 +105,8 @@ server.on('stream', (stream, headers) => {
             '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n'
         );
 
-        setTimeout(function() {
-            stream.write('' +
-                '</head>\n' +
-                '<body>\n' +
-                '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
-                '</body>\n' +
-                '<script src="script.js"></script>' +
-                '<html>'
-            );
-            stream.end();
-
-            pushAsset(stream, jsFile);
-        }, 500);
+        // emulation of async with timeout rendering
+        await secondRender(stream, jsFile);
 
     } else {
         const responseMimeType = mime.lookup(fullPath);
