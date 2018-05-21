@@ -1,3 +1,7 @@
+/*
+* https://nodejs.org/api/http2.html
+* */
+
 const fs = require('fs');
 const path = require('path');
 const http2 = require('http2');
@@ -6,6 +10,7 @@ const {
     HTTP2_HEADER_PATH,
     HTTP2_HEADER_METHOD,
     HTTP_STATUS_NOT_FOUND,
+    NGHTTP2_REFUSED_STREAM,
     HTTP_STATUS_INTERNAL_SERVER_ERROR
 } = http2.constants;
 
@@ -23,15 +28,28 @@ const pushAsset = (stream, file) => {
     const filePath = path.resolve(path.join(serverRoot, file.filePath));
 
     !stream.closed && stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, { parent: stream.id }, (err, pushStream) => {
-        console.log(">> Pushing:", file.path);
+        if (!err) {
+            console.log(">> Pushing:", file.path);
 
-        pushStream.respondWithFile(filePath, file.headers, {
-            onError: (err) => {
-                console.log('pushStream error', err);
+            pushStream.on('error', (err) => {
+                console.log('pushStream.on error', err);
 
-                respondToStreamError(err, stream);
-            }
-        });
+                const isRefusedStream = err.code === 'ERR_HTTP2_STREAM_ERROR' &&
+                    pushStream.rstCode === NGHTTP2_REFUSED_STREAM;
+
+                if (isRefusedStream)  {
+                    return;
+                }
+
+                respondToStreamError(err, pushStream);
+            });
+
+            pushStream.respondWithFile(filePath, file.headers);
+        }
+
+        if (err) {
+            console.log(">> Pushing error:", err);
+        }
     });
 };
 
@@ -43,6 +61,7 @@ function respondToStreamError(err, stream) {
     } else {
         stream.respond({ ":status": HTTP_STATUS_INTERNAL_SERVER_ERROR });
     }
+
     stream.end();
 }
 
@@ -125,8 +144,8 @@ server.on('stream', async (stream, headers) => {
         pushAsset(stream, cssFile1);
 
         // try to uncomment and made some quick of page refreshes - i'll get an error!
-        // pushAsset(stream, jsFile1);
-        // pushAsset(stream, jsFile2);
+        pushAsset(stream, jsFile1);
+        pushAsset(stream, jsFile2);
 
         stream.write('' +
             '<html>\n' +
