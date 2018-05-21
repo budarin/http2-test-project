@@ -2,24 +2,23 @@
 Project for discovery Http/2 capabilities
 
 Buggy situation:
-if uncomment these lines with unused assets:
-```js
-    // pushAsset(stream, jsFile1);
-    // pushAsset(stream, jsFile2);
-```
-and try quickly refresh the page - error:
-```
-events.js:167
-      throw er; // Unhandled 'error' event
-      ^
+if uncomment these if you hol key combination ```cmd+R``` in browser for some time - it leads to the error:
 
-Error [ERR_HTTP2_STREAM_ERROR]: Stream closed with error code NGHTTP2_REFUSED_STREAM
-    at ServerHttp2Stream._destroy (internal/http2/core.js:1871:13)
-    at ServerHttp2Stream.destroy (internal/streams/destroy.js:32:8)
-    at ServerHttp2Stream.[maybe-destroy] (internal/http2/core.js:1887:12)
-    at Http2Stream.onStreamClose [as onstreamclose] (internal/http2/core.js:346:26)
-Emitted 'error' event at:
-    at emitErrorNT (internal/streams/destroy.js:82:8)
-    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
-    at process._tickCallback (internal/process/next_tick.js:63:19)
+```
+npm[8356]: src\node_http2.cc:1934: Assertion `!this->IsDestroyed()' failed.
+ 1: node::DecodeWrite
+ 2: node::DecodeWrite
+ 3: ENGINE_get_ctrl_function
+ 4: DH_get0_engine
+ 5: std::basic_ostream<char,std::char_traits<char> >::basic_ostream<char,std::char_traits<char> >
+ 6: uv_loop_fork
+ 7: uv_fs_get_statbuf
+ 8: uv_dlerror
+ 9: node::CreatePlatform
+10: node::CreatePlatform
+11: node::Start
+12: v8::SnapshotCreator::`default constructor closure'
+13: v8::internal::AsmJsScanner::IsNumberStart
+14: BaseThreadInitThunk
+15: RtlUserThreadStart
 ```
