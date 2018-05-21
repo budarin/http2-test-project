@@ -23,7 +23,7 @@ npm[8356]: src\node_http2.cc:1934: Assertion `!this->IsDestroyed()' failed.
 15: RtlUserThreadStart
 ```
 
-- if comment these lines
+- if comment these lines (pushing ahead assets for the next page)
 ```
 pushAsset(stream, jsFile1);
 pushAsset(stream, jsFile2);
