@@ -28,16 +28,15 @@ const pushAsset = (stream, file) => {
     const filePath = path.resolve(path.join(serverRoot, file.filePath));
 
     stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, { parent: stream.id }, (err, pushStream) => {
-        if (!err) {
-            console.log(">> Pushing:", file.path);
-
-            pushStream.on('error', err => respondToStreamError(err, pushStream));
-            pushStream.respondWithFile(filePath, file.headers);
-        }
-
         if (err) {
             console.log(">> Pushing error:", err);
+            return;
         }
+
+        console.log(">> Pushing:", file.path);
+
+        pushStream.on('error', err => respondToStreamError(err, pushStream));
+        pushStream.respondWithFile(filePath, file.headers);
     });
 };
 
@@ -130,9 +129,9 @@ server.on('stream', async (stream, headers) => {
         pushAsset(stream, cssFile);
         pushAsset(stream, cssFile1);
 
-        // try to uncomment and made some quick of page refreshes - i'll get an error!
-        // pushAsset(stream, jsFile1);
-        // pushAsset(stream, jsFile2);
+        // unnecessary assets
+        pushAsset(stream, jsFile1);
+        pushAsset(stream, jsFile2);
 
         stream.write('' +
             '<html>\n' +
