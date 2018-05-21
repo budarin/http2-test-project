@@ -27,7 +27,7 @@ const serverRoot = "./";
 const pushAsset = (stream, file) => {
     const filePath = path.resolve(path.join(serverRoot, file.filePath));
 
-    !stream.closed && stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, { parent: stream.id }, (err, pushStream) => {
+    stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, { parent: stream.id }, (err, pushStream) => {
         if (!err) {
             console.log(">> Pushing:", file.path);
 
@@ -107,14 +107,6 @@ const secondRender = async (stream, jsFile) => {
         pushAsset(stream, jsFile);
     }
 };
-
-server.on('sessionError', error => {
-    console.log('Session error:', error);
-});
-
-server.on('streamError', error => {
-    console.log('Server stream error:', error);
-});
 
 server.on('timeout', error => {
     console.log('On server timeout:', error);
