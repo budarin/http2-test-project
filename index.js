@@ -129,7 +129,7 @@ server.on('stream', async (stream, headers) => {
         pushAsset(stream, cssFile);
         pushAsset(stream, cssFile1);
 
-        // unnecessary assets
+        // unnecessary assets for the page but are needed for the rest pages
         pushAsset(stream, jsFile1);
         pushAsset(stream, jsFile2);
 
