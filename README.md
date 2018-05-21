@@ -28,7 +28,7 @@ npm[8356]: src\node_http2.cc:1934: Assertion `!this->IsDestroyed()' failed.
 pushAsset(stream, jsFile1);
 pushAsset(stream, jsFile2);
 ```
-and try to reload the page some time - it wil take much more time to get the error
+and try to reload the page some time - it will take much more time to get the error
 ```
 npm[11960]: src\node_file.cc:215: Assertion `!reading_' failed.
  1: node::DecodeWrite
