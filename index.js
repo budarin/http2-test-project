@@ -97,7 +97,7 @@ server.on('streamError', error => {
 });
 
 server.on('timeout', error => {
-    console.log('Timeout error:', error);
+    console.log('On server timeout:', error);
 });
 
 server.on('stream', async (stream, headers) => {
