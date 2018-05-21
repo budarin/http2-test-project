@@ -93,7 +93,7 @@ server.on('sessionError', error => {
 });
 
 server.on('streamError', error => {
-    console.log('Stream error:', error);
+    console.log('Server stream error:', error);
 });
 
 server.on('timeout', error => {
