@@ -2,7 +2,7 @@
 Project for discovery Http/2 capabilities
 
 Buggy situation:
-if you hold key combination ```cmd+R``` in browser for some time - it leads to the error:
+- if you hold key combination ```cmd+R``` in browser for some time - it leads to the error:
 
 ```
 npm[8356]: src\node_http2.cc:1934: Assertion `!this->IsDestroyed()' failed.
@@ -21,4 +21,19 @@ npm[8356]: src\node_http2.cc:1934: Assertion `!this->IsDestroyed()' failed.
 13: v8::internal::AsmJsScanner::IsNumberStart
 14: BaseThreadInitThunk
 15: RtlUserThreadStart
+```
+
+- if comment these lines
+```
+pushAsset(stream, jsFile1);
+pushAsset(stream, jsFile2);
+```
+and try to reload the page some time - it wil take much more time to get the error
+```
+npm[11960]: src\node_file.cc:215: Assertion `!reading_' failed.
+ 1: node::DecodeWrite
+ 2: node::DecodeWrite
+ 3: uv_loop_fork
+ 4: uv_loop_fork
+ 5: 000002D3B3B06400
 ```
