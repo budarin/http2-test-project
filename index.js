@@ -22,11 +22,13 @@ const serverRoot = "./";
 const pushAsset = (stream, file) => {
     const filePath = path.resolve(path.join(serverRoot, file.filePath));
 
-    stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, { parent: stream.id }, (err, pushStream) => {
+    !stream.closed && stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, { parent: stream.id }, (err, pushStream) => {
         console.log(">> Pushing:", file.path);
 
         pushStream.respondWithFile(filePath, file.headers, {
             onError: (err) => {
+                console.log('pushStream error', err);
+
                 respondToStreamError(err, stream);
             }
         });
@@ -34,7 +36,7 @@ const pushAsset = (stream, file) => {
 };
 
 function respondToStreamError(err, stream) {
-    console.log('Error', err);
+    console.log('respondToStreamError', err);
 
     if (err.code === 'ENOENT') {
         stream.respond({ ":status": HTTP_STATUS_NOT_FOUND });
@@ -67,7 +69,7 @@ function getFileDescription(file) {
 const secondRender = async (stream, jsFile) => {
     // emulate a long rendering
     await new Promise(resolve => {
-        setTimeout(resolve, 500); //1000);
+        setTimeout(resolve, 1000);
     });
 
     if (!stream.closed) {
@@ -119,7 +121,7 @@ server.on('stream', async (stream, headers) => {
         const jsFile2 = getFileDescription('script2.js');
 
 
-        // pushAsset(stream, cssFile);
+        pushAsset(stream, cssFile);
         pushAsset(stream, cssFile1);
 
         // try to uncomment and made some quick of page refreshes - i'll get an error!
