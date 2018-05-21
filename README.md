@@ -2,7 +2,7 @@
 Project for discovery Http/2 capabilities
 
 Buggy situation:
-if uncomment these if you hol key combination ```cmd+R``` in browser for some time - it leads to the error:
+if you hol key combination ```cmd+R``` in browser for some time - it leads to the error:
 
 ```
 npm[8356]: src\node_http2.cc:1934: Assertion `!this->IsDestroyed()' failed.
