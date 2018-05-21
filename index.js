@@ -47,7 +47,7 @@ function respondToStreamError(err, stream) {
     const isRefusedStream =
         err.code === 'ERR_HTTP2_STREAM_ERROR' && stream.rstCode === NGHTTP2_REFUSED_STREAM;
 
-    if (isRefusedStream || !stream.closed) {
+    if (isRefusedStream || stream.closed) {
         return;
     }
 
@@ -131,7 +131,7 @@ server.on('stream', async (stream, headers) => {
         pushAsset(stream, cssFile1);
 
         // try to uncomment and made some quick of page refreshes - i'll get an error!
-         pushAsset(stream, jsFile1);
+        // pushAsset(stream, jsFile1);
         // pushAsset(stream, jsFile2);
 
         stream.write('' +
