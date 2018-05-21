@@ -1,23 +1,8 @@
 # http2-test-project
 Project for discovery Http/2 capabilities
 
-Buggy situations
-- if set timeout to a noticeable
-```
-setTimeout(resolve, 0); -> setTimeout(resolve, 1000);
-```
- 
-and try to quickly refresh the page - it will reproduce the error:
-
-```
-(node:3652) UnhandledPromiseRejectionWarning: Error [ERR_STREAM_WRITE_AFTER_END]: write after end
-    at writeAfterEnd (_stream_writable.js:243:12)
-    at ServerHttp2Stream.Writable.write (_stream_writable.js:292:5)
-    at secondRender (D:\Projects\http2-test-project\index.js:71:12)
-(node:3652) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 2)
-
-```
-- if uncomment these lines with unused assets:
+Buggy situation:
+if uncomment these lines with unused assets:
 ```js
     // pushAsset(stream, jsFile1);
     // pushAsset(stream, jsFile2);
