@@ -12,6 +12,7 @@ const {
 const options = {
     key: fs.readFileSync('./server.key'),
     cert: fs.readFileSync('./server.crt'),
+    ca: fs.readFileSync('./cacert.crt'),
     allowHTTP1: true,
 };
 
@@ -66,7 +67,7 @@ function getFileDescription(file) {
 const secondRender = async (stream, jsFile) => {
     // emulate a long rendering
     await new Promise(resolve => {
-        setTimeout(resolve, 500); //1000);
+        stream.setTimeout(500, resolve); //1000);
     });
 
     if (!stream.closed) {
