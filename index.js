@@ -11,7 +11,8 @@ const {
 
 const options = {
     key: fs.readFileSync('./server.key'),
-    cert: fs.readFileSync('./server.crt')
+    cert: fs.readFileSync('./server.crt'),
+    allowHTTP1: true,
 };
 
 const server = http2.createSecureServer(options);
@@ -20,7 +21,7 @@ const serverRoot = "./";
 const pushAsset = (stream, file) => {
     const filePath = path.resolve(path.join(serverRoot, file.filePath));
 
-    stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, (err, pushStream) => {
+    stream.pushStream({ [HTTP2_HEADER_PATH]: file.path }, { parent: stream.id }, (err, pushStream) => {
         console.log(">> Pushing:", file.path);
 
         pushStream.respondWithFile(filePath, file.headers, {
@@ -65,27 +66,30 @@ function getFileDescription(file) {
 const secondRender = async (stream, jsFile) => {
     // emulate a long rendering
     await new Promise(resolve => {
-        setTimeout(resolve, 100); //1000);
+        setTimeout(resolve, 500); //1000);
     });
 
-    stream.write('' +
-        '</head>\n' +
-        '<body>\n' +
-        '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
-        '</body>\n' +
-        '<script src="script.js"></script>' +
-        '<html>'
-    );
+    if (!stream.closed) {
+        stream.write('' +
+            '</head>\n' +
+            '<body>\n' +
+            '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
+            '</body>\n' +
+            '<script src="script.js"></script>' +
+            '<html>'
+        );
 
-    stream.end();
+        stream.end();
 
-    pushAsset(stream, jsFile);
+        pushAsset(stream, jsFile);
+    }
 };
 
 server.on('stream', async (stream, headers) => {
     const fullPath = headers[HTTP2_HEADER_PATH];
     const method = headers[HTTP2_HEADER_METHOD];
 
+    console.log('>> Path:', fullPath);
     console.log('>> Method:', method);
 
     if (fullPath === '/') {
@@ -102,7 +106,7 @@ server.on('stream', async (stream, headers) => {
         const jsFile2 = getFileDescription('script2.js');
 
 
-        pushAsset(stream, cssFile);
+        // pushAsset(stream, cssFile);
         pushAsset(stream, cssFile1);
 
         // try to uncomment and made some quick of page refreshes - i'll get an error!
@@ -137,4 +141,4 @@ server.on('stream', async (stream, headers) => {
 
 });
 
-server.listen(443);
+server.listen(4430);
