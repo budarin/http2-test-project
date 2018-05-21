@@ -31,20 +31,7 @@ const pushAsset = (stream, file) => {
         if (!err) {
             console.log(">> Pushing:", file.path);
 
-            pushStream.on('error', err => {
-                console.log('pushStream on error', err);
-
-                const isRefusedStream =
-                    err.code === 'ERR_HTTP2_STREAM_ERROR' &&
-                    pushStream.rstCode === NGHTTP2_REFUSED_STREAM;
-
-                if (isRefusedStream)  {
-                    return;
-                }
-
-                respondToStreamError(err, pushStream);
-            });
-
+            pushStream.on('error', err => respondToStreamError(err, pushStream));
             pushStream.respondWithFile(filePath, file.headers);
         }
 
@@ -56,6 +43,13 @@ const pushAsset = (stream, file) => {
 
 function respondToStreamError(err, stream) {
     console.log('respondToStreamError', err);
+
+    const isRefusedStream =
+        err.code === 'ERR_HTTP2_STREAM_ERROR' && stream.rstCode === NGHTTP2_REFUSED_STREAM;
+
+    if (isRefusedStream || !stream.closed) {
+        return;
+    }
 
     if (err.code === 'ENOENT') {
         stream.respond({ ":status": HTTP_STATUS_NOT_FOUND });
@@ -137,8 +131,8 @@ server.on('stream', async (stream, headers) => {
         pushAsset(stream, cssFile1);
 
         // try to uncomment and made some quick of page refreshes - i'll get an error!
-        pushAsset(stream, jsFile1);
-        pushAsset(stream, jsFile2);
+         pushAsset(stream, jsFile1);
+        // pushAsset(stream, jsFile2);
 
         stream.write('' +
             '<html>\n' +
