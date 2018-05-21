@@ -67,7 +67,7 @@ function getFileDescription(file) {
 const secondRender = async (stream, jsFile) => {
     // emulate a long rendering
     await new Promise(resolve => {
-        stream.setTimeout(500, resolve); //1000);
+        setTimeout(resolve, 500); //1000);
     });
 
     if (!stream.closed) {
@@ -85,6 +85,18 @@ const secondRender = async (stream, jsFile) => {
         pushAsset(stream, jsFile);
     }
 };
+
+server.on('sessionError', error => {
+    console.log('Session error:', error);
+});
+
+server.on('streamError', error => {
+    console.log('Stream error:', error);
+});
+
+server.on('timeout', error => {
+    console.log('Timeout error:', error);
+});
 
 server.on('stream', async (stream, headers) => {
     const fullPath = headers[HTTP2_HEADER_PATH];
@@ -124,8 +136,12 @@ server.on('stream', async (stream, headers) => {
             ''
         );
 
-        // emulation of a long async rendering
-        await secondRender(stream, jsFile);
+        try {
+            // emulation of a long async rendering
+            await secondRender(stream, jsFile);
+        } catch(err) {
+            console.log('Second render error:', err);
+        }
 
     } else {
         const responseMimeType = mime.lookup(fullPath);
