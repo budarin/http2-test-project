@@ -31,10 +31,11 @@ const pushAsset = (stream, file) => {
         if (!err) {
             console.log(">> Pushing:", file.path);
 
-            pushStream.on('error', (err) => {
-                console.log('pushStream.on error', err);
+            pushStream.on('error', err => {
+                console.log('pushStream on error', err);
 
-                const isRefusedStream = err.code === 'ERR_HTTP2_STREAM_ERROR' &&
+                const isRefusedStream =
+                    err.code === 'ERR_HTTP2_STREAM_ERROR' &&
                     pushStream.rstCode === NGHTTP2_REFUSED_STREAM;
 
                 if (isRefusedStream)  {
