@@ -86,6 +86,8 @@ const secondRender = async (stream, jsFile) => {
     });
 
     if (!stream.closed) {
+        pushAsset(stream, jsFile);
+
         stream.write('' +
             '</head>\n' +
             '<body>\n' +
@@ -96,8 +98,6 @@ const secondRender = async (stream, jsFile) => {
         );
 
         stream.end();
-
-        pushAsset(stream, jsFile);
     }
 };
 
