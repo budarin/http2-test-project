@@ -79,25 +79,23 @@ function getFileDescription(file) {
     };
 }
 
-const secondRender = async (stream, jsFile) => {
+const appRender = async (stream, jsFile) => {
     // emulate a long rendering
     await new Promise(resolve => {
         setTimeout(resolve, 1000);
     });
 
     if (!stream.closed) {
-        pushAsset(stream, jsFile);
+        // pushAsset(stream, jsFile);
 
-        stream.write('' +
+        stream.end('' +
             '</head>\n' +
             '<body>\n' +
             '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
             '</body>\n' +
-            '<script src="script.js"></script>' +
+            '<script src="script.js" defer></script>' +
             '<html>'
         );
-
-        stream.end();
     }
 };
 
@@ -125,13 +123,14 @@ server.on('stream', async (stream, headers) => {
         const jsFile1 = getFileDescription('script1.js');
         const jsFile2 = getFileDescription('script2.js');
 
-
         pushAsset(stream, cssFile);
         pushAsset(stream, cssFile1);
 
         // unnecessary assets for the page but are needed for the rest pages
-        pushAsset(stream, jsFile1);
-        pushAsset(stream, jsFile2);
+        //pushAsset(stream, jsFile1);
+        //pushAsset(stream, jsFile2);
+
+        pushAsset(stream, jsFile);
 
         stream.write('' +
             '<html>\n' +
@@ -145,7 +144,7 @@ server.on('stream', async (stream, headers) => {
 
         try {
             // emulation of a long async rendering
-            await secondRender(stream, jsFile);
+            await appRender(stream, jsFile);
         } catch(err) {
             console.log('Second render error:', err);
         }
