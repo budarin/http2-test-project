@@ -4,11 +4,12 @@
   "description": "Http2 test project",
   "main": "index.js",
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "upgrade": "ncu --upgradeAll && npm install"
   },
   "author": "Budarin Vadim",
   "license": "ISC",
   "devDependencies": {
-    "mime-types": "^2.1.18"
+    "mime-types": "^2.1.19"
   }
 }
