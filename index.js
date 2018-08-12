@@ -81,9 +81,9 @@ function getFileDescription(file) {
 
 const appRender = async (stream, jsFile) => {
     // emulate a long rendering
-    await new Promise(resolve => {
-        setTimeout(resolve, 1000);
-    });
+    // await new Promise(resolve => {
+    //     setTimeout(resolve, 1000);
+    // });
 
     if (!stream.closed) {
         // pushAsset(stream, jsFile);
@@ -93,7 +93,6 @@ const appRender = async (stream, jsFile) => {
             '<body>\n' +
             '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
             '</body>\n' +
-            '<script src="script.js" defer></script>' +
             '<html>'
         );
     }
@@ -120,8 +119,8 @@ server.on('stream', async (stream, headers) => {
         const cssFile1 = getFileDescription('style1.css');
         const jsFile = getFileDescription('script.js');
 
-        const jsFile1 = getFileDescription('script1.js');
-        const jsFile2 = getFileDescription('script2.js');
+        // const jsFile1 = getFileDescription('script1.js');
+        // const jsFile2 = getFileDescription('script2.js');
 
         pushAsset(stream, cssFile);
         pushAsset(stream, cssFile1);
@@ -138,6 +137,7 @@ server.on('stream', async (stream, headers) => {
 
             '    <link rel="stylesheet" type="text/css"  href="/style.css">\n' +
             '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n' +
+            '    <script src="script.js" defer></script>' +
 
             ''
         );
@@ -165,3 +165,5 @@ server.on('stream', async (stream, headers) => {
 });
 
 server.listen(4430);
+
+console.log('Server is run on https://localhost:4430');
