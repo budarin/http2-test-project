@@ -39,13 +39,13 @@ const pushAsset = (stream, file) => {
 
         console.log(">> Pushing:", file.path);
 
-        pushStream.on('error', err => respondToStreamError(err, pushStream));
+        pushStream.on('error', err => respondToStreamError(err, pushStream, file));
         pushStream.respondWithFile(filePath, file.headers, { statCheck });
     });
 };
 
-function respondToStreamError(err, stream) {
-    console.log('respondToStreamError', err);
+function respondToStreamError(err, stream, file = {}) {
+    console.log('respondToStreamError: ', (file.path + '\n') || '' ,err);
 
     const isRefusedStream =
         err.code === 'ERR_HTTP2_STREAM_ERROR' && stream.rstCode === NGHTTP2_REFUSED_STREAM;
@@ -94,11 +94,14 @@ const appRender = async (stream, jsFile) => {
 
         pushAsset(stream, jsFile);
 
+        stream.write('' + 
+            '    <script src="script.js" defer></script>' +
+            '</head>\n'
+        );
+        
         stream.end('' +
-            '</head>\n' +
             '<body>\n' +
             '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
-            '    <script src="script.js" defer></script>' +
             '</body>\n' +
             '<html>'
         );
@@ -133,8 +136,8 @@ server.on('stream', async (stream, headers) => {
         pushAsset(stream, cssFile1);
 
         // unnecessary assets for the page but are needed for the rest pages
-        //pushAsset(stream, jsFile1);
-        //pushAsset(stream, jsFile2);
+        // pushAsset(stream, jsFile1);
+        // pushAsset(stream, jsFile2);
 
         stream.write('' +
             '<html>\n' +
