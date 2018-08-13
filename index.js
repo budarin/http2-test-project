@@ -81,9 +81,9 @@ function getFileDescription(file) {
 
 const appRender = async (stream, jsFile) => {
     // emulate a long rendering
-    // await new Promise(resolve => {
-    //     setTimeout(resolve, 1000);
-    // });
+    await new Promise(resolve => {
+        setTimeout(resolve, 1000);
+    });
 
     if (!stream.closed) {
         // pushAsset(stream, jsFile);
