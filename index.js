@@ -139,9 +139,10 @@ server.on('stream', async (stream, headers) => {
         pushAsset(stream, jsFile2);
 
         stream.write('' +
-            '<html>\n' +
+            '<!DOCTYPE html>\n' +
+            '<html lang="ru" >\n' +
             '<head>\n' +
-
+            '   <title>HTTP/2 project</title>\n' +
             '    <link rel="stylesheet" type="text/css"  href="/style.css">\n' +
             '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n' +
             '    <script src="script1.js" defer></script>\n' +
