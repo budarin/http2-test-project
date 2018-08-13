@@ -86,12 +86,15 @@ const appRender = async (stream, jsFile) => {
     });
 
     if (!stream.closed) {
-        // pushAsset(stream, jsFile);
+        console.log('Render rest html');
+
+        pushAsset(stream, jsFile);
 
         stream.end('' +
             '</head>\n' +
             '<body>\n' +
             '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
+            '    <script src="script.js" defer></script>' +
             '</body>\n' +
             '<html>'
         );
@@ -129,15 +132,12 @@ server.on('stream', async (stream, headers) => {
         //pushAsset(stream, jsFile1);
         //pushAsset(stream, jsFile2);
 
-        pushAsset(stream, jsFile);
-
         stream.write('' +
             '<html>\n' +
             '<head>\n' +
 
             '    <link rel="stylesheet" type="text/css"  href="/style.css">\n' +
             '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n' +
-            '    <script src="script.js" defer></script>' +
 
             ''
         );
