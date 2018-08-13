@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const http2 = require('http2');
 const mime = require('mime-types');
+
 const {
     HTTP2_HEADER_PATH,
     HTTP2_HEADER_METHOD,
@@ -20,6 +21,13 @@ const options = {
     ca: fs.readFileSync('./cacert.crt'),
     allowHTTP1: true,
 };
+
+const cssFile = getFileDescription('style.css');
+const cssFile1 = getFileDescription('style1.css');
+const jsFile = getFileDescription('script.js');
+const jsFile1 = getFileDescription('script1.js');
+const jsFile2 = getFileDescription('script2.js');
+
 
 function statCheck(stat, headers) {
     headers['last-modified'] = stat.mtime.toUTCString();
@@ -95,7 +103,7 @@ const appRender = async (stream, jsFile) => {
         pushAsset(stream, jsFile);
 
         stream.write('' + 
-            '    <script src="script.js" defer></script>' +
+            '    <script src="script.js" defer></script>\n' +
             '</head>\n'
         );
         
@@ -125,19 +133,10 @@ server.on('stream', async (stream, headers) => {
             ':status': 200
         });
 
-        const cssFile = getFileDescription('style.css');
-        const cssFile1 = getFileDescription('style1.css');
-        const jsFile = getFileDescription('script.js');
-
-        // const jsFile1 = getFileDescription('script1.js');
-        // const jsFile2 = getFileDescription('script2.js');
-
         pushAsset(stream, cssFile);
         pushAsset(stream, cssFile1);
-
-        // unnecessary assets for the page but are needed for the rest pages
-        // pushAsset(stream, jsFile1);
-        // pushAsset(stream, jsFile2);
+        pushAsset(stream, jsFile1);
+        pushAsset(stream, jsFile2);
 
         stream.write('' +
             '<html>\n' +
@@ -145,6 +144,8 @@ server.on('stream', async (stream, headers) => {
 
             '    <link rel="stylesheet" type="text/css"  href="/style.css">\n' +
             '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n' +
+            '    <script src="script1.js" defer></script>\n' +
+            '    <script src="script2.js" defer></script>\n' +
 
             ''
         );
