@@ -21,6 +21,10 @@ const options = {
     allowHTTP1: true,
 };
 
+function statCheck(stat, headers) {
+    headers['last-modified'] = stat.mtime.toUTCString();
+}
+
 const server = http2.createSecureServer(options);
 
 const serverRoot = "./";
@@ -36,7 +40,7 @@ const pushAsset = (stream, file) => {
         console.log(">> Pushing:", file.path);
 
         pushStream.on('error', err => respondToStreamError(err, pushStream));
-        pushStream.respondWithFile(filePath, file.headers);
+        pushStream.respondWithFile(filePath, file.headers, { statCheck });
     });
 };
 
