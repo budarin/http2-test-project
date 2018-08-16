@@ -110,6 +110,8 @@ const appRender = async (stream, jsFile) => {
         stream.end('' +
             '<body>\n' +
             '    <h1 class="myHelloClass">Hi, EmpireConf!</h1>\n' +
+            '    <script src="script1.js" defer></script>\n' +
+            '    <script src="script2.js" defer></script>\n' +
             '</body>\n' +
             '<html>'
         );
@@ -145,8 +147,6 @@ server.on('stream', async (stream, headers) => {
             '   <title>HTTP/2 project</title>\n' +
             '    <link rel="stylesheet" type="text/css"  href="/style.css">\n' +
             '    <link rel="stylesheet" type="text/css"  href="/style1.css">\n' +
-            '    <script src="script1.js" defer></script>\n' +
-            '    <script src="script2.js" defer></script>\n' +
 
             ''
         );
